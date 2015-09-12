@@ -12,8 +12,27 @@ int write_buffer(char* buf, FILE* fptr) {
  * 5 server did not respond with a header
  * 6 or greater got error code errcode
  */
-int print_error(int errcode) {
-    
+void print_error(int errcode) {
+    switch(errcode) {
+        case 1:
+            printf("usage hw1 <URL>");
+            break;
+        case 2:
+            printf("Error: malformed URL");
+            break;
+        case 3:
+            printf("Error: no such host");
+            break;
+        case 4:
+            printf("receiving request failed");
+            break;
+        case 5:
+            printf("Could not find headers; quitting");
+            break;
+        default:
+            printf("Got error code %d", errcode);
+            break;
+    }
 }
 
 int main(int argc, char** argv){
