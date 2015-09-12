@@ -61,7 +61,7 @@ int main(int argc, char** argv){
     printf("%s\n", host);
     printf("%s\n", path);
     printf("%s\n", file);
-    
+    /*
     struct hostent* result = gethostbyname(host);
     if (!result) {
         print_error(3);
@@ -89,4 +89,5 @@ int main(int argc, char** argv){
 
     shutdown(sock,SHUT_RDWR);
     fclose(fptr);
+    */
 }
