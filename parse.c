@@ -36,14 +36,14 @@ int parse(char* url, char* host, char* path, char* file)
     host[i-hostname_start_flag] = 0;
 
     // copy the path from the url to the path variable
-    for(i=hostname_end_flag+1;i<strlen(url);i++)
-    {   path[i-hostname_end_flag-1] = url[i];   }
+    for(i=hostname_end_flag;i<strlen(url);i++)
+    {   path[i-hostname_end_flag] = url[i];   }
     path[i-hostname_end_flag] = 0;
 
     // copy the filename from the url to the file variable
     for(i=last_slash_flag+1;i<strlen(url);i++)
     {   file[i-last_slash_flag-1] = url[i];   }
-    file[i-last_slash_flag] = 0;
+    file[i-last_slash_flag-1] = 0;
 
     return 0;
 }
