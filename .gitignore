@@ -1,3 +1,5 @@
 *.o
 *.swp
 hw1
+parse
+parsetest
