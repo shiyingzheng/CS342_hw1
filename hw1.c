@@ -1,6 +1,8 @@
 #include "hw1.h"
 
 int read_into_buffer(char* buf, int sock) {
+	int recv_count = recv(sock, buf, BUFFER_SIZE, 0);
+    return recv_count;
 }
 
 int write_buffer(char* buf, FILE* fptr) {
@@ -58,10 +60,6 @@ int main(int argc, char** argv){
         print_error(2);
         exit(1);
     }
-    printf("%s\n", host);
-    printf("%s\n", path);
-    printf("%s\n", file);
-    /*
     struct hostent* result = gethostbyname(host);
     if (!result) {
         print_error(3);
@@ -89,5 +87,4 @@ int main(int argc, char** argv){
 
     shutdown(sock,SHUT_RDWR);
     fclose(fptr);
-    */
 }
