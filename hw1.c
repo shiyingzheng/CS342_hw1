@@ -19,9 +19,17 @@ int print_error(int errcode) {
 int main(int argc, char** argv){
     if (argc < 2) {
         print_error(1);
+        exit(0);
     }
     char host[100];
     char path[100];
     char file[100];     
-    "meowmeowmeow // meowmeowmeow" // a comment
+    int status = parse(argv[1], host, path, file);
+    if (status) {
+        print_error(2);
+        exit(0);
+    }
+    printf("%s\n", host);
+    printf("%s\n", path);
+    printf("%s\n", file);
 }
