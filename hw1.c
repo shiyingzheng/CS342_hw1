@@ -40,9 +40,9 @@ int main(int argc, char** argv){
         print_error(1);
         exit(0);
     }
-    char host[100];
-    char path[100];
-    char file[100];     
+    char host[MAX_URL_LENGTH];
+    char path[MAX_URL_LENGTH];
+    char file[MAX_URL_LENGTH];     
     int status = parse(argv[1], host, path, file);
     if (status) {
         print_error(2);
