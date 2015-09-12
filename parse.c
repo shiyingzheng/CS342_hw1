@@ -1,5 +1,6 @@
-#include<stdio.h>
-#include<regex.h>
+#include <parse.h>
+#include <stdio.h>
+#include <regex.h>
 
 int main( int argc, char *argv[] )
 {
@@ -7,4 +8,6 @@ int main( int argc, char *argv[] )
     protocol = regcomp(&url, "", 0);
     website = regcomp();
     resource = regcomp();
+}
+struct hostent* parse(char* url, char* path, char* path) {
 }
