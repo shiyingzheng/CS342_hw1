@@ -10,7 +10,9 @@ int write_buffer(char* buf, FILE* fptr) {
  * 3 unknown host
  * 4 server did not respond
  * 5 server did not respond with a header
- * 6 or greater got error code errcode
+ * 6 Creating socket failed
+ * 7 Error connecting
+ * 8 or greater got error code errcode
  */
 void print_error(int errcode) {
     switch(errcode) {
@@ -29,6 +31,8 @@ void print_error(int errcode) {
         case 5:
             printf("Could not find headers; quitting\n");
             break;
+        case 6:
+            printf("Failed to create socket\n");            
         default:
             printf("Got error code %d\n", errcode);
             break;
@@ -38,7 +42,7 @@ void print_error(int errcode) {
 int main(int argc, char** argv){
     if (argc < 2) {
         print_error(1);
-        exit(0);
+        exit(1);
     }
     char host[MAX_URL_LENGTH];
     char path[MAX_URL_LENGTH];
@@ -46,9 +50,26 @@ int main(int argc, char** argv){
     int status = parse(argv[1], host, path, file);
     if (status) {
         print_error(2);
-        exit(0);
+        exit(1);
     }
     printf("%s\n", host);
     printf("%s\n", path);
     printf("%s\n", file);
+    
+    struct hostent* result = gethostbyname(host);
+    if (result) {
+        int sock = socket(AF_INET, SOCK_STREAM, 0);
+        if(sock < 0) {
+            print_error(7);
+            exit(1);
+        }
+        struct sockaddr_in addr; 
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(80);    
+        addr.sin_addr.s_addr = inet_addr(net_ntoa(*((struct in_addr*)result->h_addr_list[0])));
+    }
+    else {
+        print_error(3);
+    }
+    
 }
