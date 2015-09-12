@@ -10,4 +10,5 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 #define MAX_URL_LENGTH 256
-int write_buffer(char* buf, FILE* fptr);
+#define BUF_SIZE 1048576
+extern int write_buffer(char* buf, FILE* fptr);
