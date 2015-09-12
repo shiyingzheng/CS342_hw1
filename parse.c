@@ -33,17 +33,17 @@ int parse(char* url, char* host, char* path, char* file)
     // copy the hostname from the url to the host variable
     for(i=hostname_start_flag;i<hostname_end_flag;i++)
     {   host[i-hostname_start_flag] = url[i];   }
-    host[i] = 0;
+    host[i-1] = 0;
 
     // copy the path from the url to the path variable
     for(i=hostname_end_flag+1;i<strlen(url);i++)
     {   path[i-hostname_end_flag-1] = url[i];   }
-    path[i] = 0;
+    path[i-1] = 0;
 
     // copy the filename from the url to the file variable
     for(i=last_slash_flag+1;i<strlen(url);i++)
     {   file[i-last_slash_flag-1] = url[i];   }
-    file[i] = 0;
+    file[i-1] = 0;
 
     return 0;
 }
