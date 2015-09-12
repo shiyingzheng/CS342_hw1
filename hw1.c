@@ -15,22 +15,22 @@ int write_buffer(char* buf, FILE* fptr) {
 void print_error(int errcode) {
     switch(errcode) {
         case 1:
-            printf("usage hw1 <URL>");
+            printf("usage hw1 <URL>\n");
             break;
         case 2:
-            printf("Error: malformed URL");
+            printf("Error: malformed URL\n");
             break;
         case 3:
-            printf("Error: no such host");
+            printf("Error: no such host\n");
             break;
         case 4:
-            printf("receiving request failed");
+            printf("receiving request failed\n");
             break;
         case 5:
-            printf("Could not find headers; quitting");
+            printf("Could not find headers; quitting\n");
             break;
         default:
-            printf("Got error code %d", errcode);
+            printf("Got error code %d\n", errcode);
             break;
     }
 }
