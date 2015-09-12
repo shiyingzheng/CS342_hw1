@@ -41,3 +41,16 @@ int parse(char* url, char* host, char* path, char* file)
 
     return 0;
 }
+
+int main()
+{
+    char* url = "http://lolwebiste.gov/get/this/file.jpeg";
+    char* host = malloc(101);
+    char* path = malloc(101);
+    char* file = malloc(101);
+    int out = parse(&url, &host, &path, &file);
+    if(out!=0)
+    {   printf("Meow...");   }
+    else
+    {   printf("\n%s\n\n%s\n\n%s\n",host,path,file);   }
+}
