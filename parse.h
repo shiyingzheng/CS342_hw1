@@ -1,5 +1,3 @@
-#include <netdb.h>
-
 // url is a null terminated string that represents anything that the lab can throw at us
 // returns 0 if url is valid, otherwise -1
 // host, path, and file should be character arrays of length 100
