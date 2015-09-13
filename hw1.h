@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <regex.h>
+#include <arpa/inet.h>
 #define MAX_URL_LENGTH 256
 #define BUF_SIZE 1048576
 extern int write_buffer(char* buf, FILE* fptr);
