@@ -36,7 +36,7 @@ int parse(char* url, char* host, char* path, char* file)
     host[i-hostname_start_flag] = 0;
 
     // copy the path from the url to the path variable
-    for(i=hostname_end_flag;i<strlen(url);i++)
+    for(i=hostname_end_flag;i<last_slash_flag + 1;i++)
     {   path[i-hostname_end_flag] = url[i];   }
     path[i-hostname_end_flag] = 0;
 

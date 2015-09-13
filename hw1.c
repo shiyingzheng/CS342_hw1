@@ -1,8 +1,7 @@
 #include "hw1.h"
 
-
 int read_into_buffer(char* buf, int sock) {
-	int recv_count = recv(sock, buf, BUFFER_SIZE, 0);
+	int recv_count = recv(sock, buf, BUF_SIZE, 0);
     return recv_count;
 }
 
@@ -61,6 +60,8 @@ int main(int argc, char** argv){
         print_error(2);
         exit(1);
     }
+
+    printf("Host: %s\nPath: %s\nFile: %s\n", host, path, file);
     struct hostent* result = gethostbyname(host);
     if (!result) {
         print_error(3);
@@ -84,10 +85,15 @@ int main(int argc, char** argv){
         print_error(7);
         exit(1);
     }
+    char request[MAX_URL_LENGTH + 10];
+    sprintf(request, "GET %s%s HTTP/1.0\r\nHost: %s\r\n\r\n", path, file, host);
+    write(sock, request, strlen(request));
+     
     char buffer[BUF_SIZE];
     FILE* fptr = fopen(file, "w");
 
     read_into_buffer(buffer, sock);
+    printf("%s\n", buffer);
     write_buffer(buffer, fptr);
 
     shutdown(sock,SHUT_RDWR);

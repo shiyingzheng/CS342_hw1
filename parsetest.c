@@ -6,7 +6,7 @@
 int main()
 {
     char* url = "http://lolwebiste.gov/ayy/lmao.flac";
-    char* url1 = "http://lolwebiste.gov/ayy/stuff/notherfolder/weeeeeeeee/lmao.flac";
+    char* url1 = "http://www.google.com";
     char host[101];
     char path[101];
     char file[101];
