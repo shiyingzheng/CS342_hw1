@@ -4,6 +4,28 @@ int read_into_buffer(char* buf, int sock) {
 }
 
 int write_buffer(char* buf, FILE* fptr) {
+    char header[BUF_SIZE];
+    regex_t regex;
+    int reti;
+    char matched[BUF_SIZE];
+
+    reti = regcomp(&regex, ".*\r\n\r\n(.*)", 0);
+    if (reti) {
+        printf("Could not compile regex\n");
+        exit(1);
+    }
+    reti = regexec(&regex, buf, 0, matched, 0);
+    if (!reti) {
+        printf(matched);
+    }
+    else if (reti == REG_NOMATCH) {
+        printf("No match\n");
+    }
+    else {
+        print("error\n");
+        exit(1);
+    }
+    regfree(&regex);
 }
 
 
@@ -36,7 +58,7 @@ void print_error(int errcode) {
             printf("Could not find headers; quitting\n");
             break;
         case 6:
-            printf("Failed to create socket\n");            
+            printf("Failed to create socket\n");
         case 7:
             printf("Error connecting\n");
         default:
@@ -52,7 +74,7 @@ int main(int argc, char** argv){
     }
     char host[MAX_URL_LENGTH];
     char path[MAX_URL_LENGTH];
-    char file[MAX_URL_LENGTH];     
+    char file[MAX_URL_LENGTH];
     int status = parse(argv[1], host, path, file);
     if (status) {
         print_error(2);
@@ -72,9 +94,9 @@ int main(int argc, char** argv){
         print_error(7);
         exit(1);
     }
-    struct sockaddr_in addr; 
+    struct sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(80);    
+    addr.sin_port = htons(80);
     addr.sin_addr.s_addr = inet_addr(inet_ntoa(*((struct in_addr*)result->h_addr_list[0])));
     int res = connect(sock, (struct sockaddr*)&addr, sizeof(addr));
     if(res < 0) {
