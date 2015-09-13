@@ -12,4 +12,5 @@
 #include <arpa/inet.h>
 #define MAX_URL_LENGTH 256
 #define BUF_SIZE 1048576
-extern int write_buffer(char* buf, FILE* fptr, int size);
+extern int write_buffer(char* buf, char* file, int size);
+extern void print_error(int errcode);

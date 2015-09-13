@@ -3,6 +3,7 @@
 int read_into_buffer(char* buf, int sock) {
     int pos = 0;
     int size;
+    printf("Recieving file.\n");
     char* line_buf = (char*)malloc(sizeof(char) * BUF_SIZE);
     while ((size = read(sock, line_buf, BUF_SIZE)) > 0) {
         memcpy(buf + pos, line_buf, size);
@@ -12,12 +13,16 @@ int read_into_buffer(char* buf, int sock) {
     return pos;
 }
 
-int write_buffer(char* buf, FILE* fptr, int size) {
+int write_buffer(char* buf, char* file, int size) {
     char* output = (char*)malloc(BUF_SIZE * sizeof(char));
     int i = 0;
     int pos = 0;
     int state = 0; //0, 1(\r), 2(\r\n), 3(\r\n\r), 4(\r\n\r\n)
 
+    int code = 0;
+    for (int i = 9; i < 12; i++) {
+        code = code * 10 + (buf[i] - '0');
+    }
     for (int i = 0; i < size; i++){
         if (state == 4){
             output[pos] = buf[i];
@@ -36,10 +41,20 @@ int write_buffer(char* buf, FILE* fptr, int size) {
             state = 0;
         }
     }
+    
     output[pos]=0;
-    write(fileno(fptr), output, pos+1);
+    
+    if (code > 299) {
+        print_error(code);
+    }
+    else {
+        FILE* fptr = fopen(file, "w");
+        printf("Saving to file %s\n", file);
+        write(fileno(fptr), output, pos+1);
+        fclose(fptr);
+    }
     free(output);
-    return 0;
+    return code;
 }
 
 
@@ -130,20 +145,15 @@ int main(int argc, char** argv){
     write(sock, request, strlen(request));
 
     char* buffer = (char*)malloc(BUF_SIZE * sizeof(char));
-    FILE* fptr = fopen(file, "w");
-    if (!fptr) {
-        printf("Could not open file: %s\n", file);
-        exit(1);
-    }
 
     int size = read_into_buffer(buffer, sock);
     if (size == -1){
         print_error(4);
+        free(buffer);
         exit(1);
     }
 
-    write_buffer(buffer, fptr, size);
+    write_buffer(buffer, file, size);
     shutdown(sock,SHUT_RDWR);
-    fclose(fptr);
     free(buffer);
 }
