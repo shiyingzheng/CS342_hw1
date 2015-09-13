@@ -9,22 +9,23 @@ int write_buffer(char* buf, FILE* fptr) {
     char header[BUF_SIZE];
     regex_t regex;
     int reti;
-    char matched[BUF_SIZE];
+    regmatch_t matched[BUF_SIZE];
 
     reti = regcomp(&regex, ".*\r\n\r\n(.*)", 0);
     if (reti) {
         printf("Could not compile regex\n");
         exit(1);
     }
+
     reti = regexec(&regex, buf, 0, matched, 0);
     if (!reti) {
-        printf(matched);
+        printf("matched");
     }
     else if (reti == REG_NOMATCH) {
         printf("No match\n");
     }
     else {
-        print("error\n");
+        printf("error\n");
         exit(1);
     }
     regfree(&regex);
@@ -110,7 +111,7 @@ int main(int argc, char** argv){
     char request[MAX_URL_LENGTH + 10];
     sprintf(request, "GET %s%s HTTP/1.0\r\nHost: %s\r\n\r\n", path, file, host);
     write(sock, request, strlen(request));
-     
+
     char buffer[BUF_SIZE];
     FILE* fptr = fopen(file, "w");
 
