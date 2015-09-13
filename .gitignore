@@ -1,5 +1,8 @@
-*.o
-*.swp
-hw1
-parse
-parsetest
+# Ignore everything
+*
+
+# But not these files
+!*.c
+!*.h
+!README*
+!Makefile
