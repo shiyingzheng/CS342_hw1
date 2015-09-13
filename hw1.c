@@ -1,7 +1,8 @@
 #include "hw1.h"
 
 int read_into_buffer(char* buf, int sock) {
-	int recv_count = recv(sock, buf, BUF_SIZE, 0);
+    printf("Receiving file.\n");
+    int recv_count = recv(sock, buf, BUF_SIZE, 0);
     return recv_count;
 }
 
@@ -103,6 +104,11 @@ int main(int argc, char** argv){
 
     addr.sin_addr = *((struct in_addr*)result->h_addr_list[0]);
 
+    char ip[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &(addr.sin_addr), ip, INET_ADDRSTRLEN);
+
+    printf("Connecting to host %s (%s) to retrieve document %s%s.\n", host, ip, path, file);
+
     int res = connect(sock, (struct sockaddr*)&addr, sizeof(addr));
     if(res < 0) {
         print_error(7);
@@ -110,6 +116,7 @@ int main(int argc, char** argv){
     }
     char request[MAX_URL_LENGTH + 10];
     sprintf(request, "GET %s%s HTTP/1.0\r\nHost: %s\r\n\r\n", path, file, host);
+    printf("\nMaking Request:\n%s", request);
     write(sock, request, strlen(request));
 
     char* buffer = (char*)malloc(BUF_SIZE * sizeof(char));
