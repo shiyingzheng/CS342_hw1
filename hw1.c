@@ -125,6 +125,10 @@ int main(int argc, char** argv){
 
     char* buffer = (char*)malloc(BUF_SIZE * sizeof(char));
     FILE* fptr = fopen(file, "w");
+    if (!fptr) {
+        printf("Could not open file: %s\n", file);
+        exit(1);
+    }
 
     int size = read_into_buffer(buffer, sock);
     if (size == -1){
