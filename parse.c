@@ -45,6 +45,8 @@ int parse(char* url, char* host, char* path, char* file)
     {   file[i-last_slash_flag-1] = url[i];   }
     file[i-last_slash_flag-1] = 0;
     
+    if(!path[0])
+    {   strcpy(path, "/");   }
     if(!file[0])
     {   strcpy(file, "index.html");   }
 

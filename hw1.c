@@ -6,22 +6,21 @@ int read_into_buffer(char* buf, int sock) {
 }
 
 int write_buffer(char* buf, FILE* fptr) {
-    char header[BUF_SIZE];
     regex_t regex;
-    int reti;
-    regmatch_t matched[BUF_SIZE];
+    int ret;
+    regmatch_t matched[2];
 
-    reti = regcomp(&regex, ".*\r\n\r\n(.*)", 0);
-    if (reti) {
+    ret = regcomp(&regex, ".*\r\n\r\n(.*)", 0);
+    if (ret) {
         printf("Could not compile regex\n");
         exit(1);
     }
 
-    reti = regexec(&regex, buf, 0, matched, 0);
-    if (!reti) {
+    ret = regexec(&regex, buf, 0, matched, 0);
+    if (!ret) {
         printf("matched");
     }
-    else if (reti == REG_NOMATCH) {
+    else if (ret == REG_NOMATCH) {
         printf("No match\n");
     }
     else {
@@ -29,6 +28,7 @@ int write_buffer(char* buf, FILE* fptr) {
         exit(1);
     }
     regfree(&regex);
+    return 0;
 }
 
 
@@ -118,7 +118,7 @@ int main(int argc, char** argv){
     printf("%s", request);
     write(sock, request, strlen(request));
 
-    char buffer[BUF_SIZE];
+    char* buffer = (char*)malloc(BUF_SIZE * sizeof(char));
     FILE* fptr = fopen(file, "w");
 
     read_into_buffer(buffer, sock);
