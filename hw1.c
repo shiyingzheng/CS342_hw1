@@ -1,9 +1,19 @@
 #include "hw1.h"
 
 int read_into_buffer(char* buf, int sock) {
-    printf("Receiving file.\n");
-    int recv_count = recv(sock, buf, BUF_SIZE, 0);
-    return recv_count;
+    int pos = 0;
+    int size;
+    char* line_buf = (char*)malloc(sizeof(char) * BUF_SIZE);
+    while ((size = read(sock, line_buf, BUF_SIZE)) > 0) {
+        printf("read %d bytes. pos is now %d\n", size, pos);
+        memcpy(buf + pos, line_buf, size);
+        pos += size;
+        buf[pos] = 0;
+        pos++;
+        read(sock, line_buf, 1);
+    }
+    free(line_buf);
+    return pos;
 }
 
 int write_buffer(char* buf, FILE* fptr) {
@@ -129,6 +139,7 @@ int main(int argc, char** argv){
     read_into_buffer(buffer, sock);
     printf("%s\n", buffer);
     write_buffer(buffer, fptr);
+    free(buffer);
 
     shutdown(sock,SHUT_RDWR);
     fclose(fptr);
