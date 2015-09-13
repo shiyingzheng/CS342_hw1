@@ -112,7 +112,7 @@ int main(int argc, char** argv){
     sprintf(request, "GET %s%s HTTP/1.0\r\nHost: %s\r\n\r\n", path, file, host);
     write(sock, request, strlen(request));
 
-    char buffer[BUF_SIZE];
+    char* buffer = (char*)malloc(BUF_SIZE * sizeof(char));
     FILE* fptr = fopen(file, "w");
 
     read_into_buffer(buffer, sock);
