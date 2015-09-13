@@ -1,6 +1,9 @@
 #include "hw1.h"
 
+
 int read_into_buffer(char* buf, int sock) {
+	int recv_count = recv(sock, buf, BUFFER_SIZE, 0);
+    return recv_count;
 }
 
 int write_buffer(char* buf, FILE* fptr) {
@@ -80,24 +83,24 @@ int main(int argc, char** argv){
         print_error(2);
         exit(1);
     }
-    printf("%s\n", host);
-    printf("%s\n", path);
-    printf("%s\n", file);
-    /*
     struct hostent* result = gethostbyname(host);
     if (!result) {
         print_error(3);
         exit(1);
     }
+
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock < 0) {
         print_error(7);
         exit(1);
     }
+
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_port = htons(80);
-    addr.sin_addr.s_addr = inet_addr(inet_ntoa(*((struct in_addr*)result->h_addr_list[0])));
+
+    addr.sin_addr = *((struct in_addr*)result->h_addr_list[0]);
+
     int res = connect(sock, (struct sockaddr*)&addr, sizeof(addr));
     if(res < 0) {
         print_error(7);
@@ -111,5 +114,4 @@ int main(int argc, char** argv){
 
     shutdown(sock,SHUT_RDWR);
     fclose(fptr);
-    */
 }
