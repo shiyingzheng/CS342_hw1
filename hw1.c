@@ -5,29 +5,33 @@ int read_into_buffer(char* buf, int sock) {
     return recv_count;
 }
 
-int write_buffer(char* buf, FILE* fptr) {
-    regex_t regex;
-    int ret;
-    regmatch_t matched[2];
+int write_buffer(char* buf, FILE* fptr, int size) {
+    char* output = (char*)malloc(BUF_SIZE * sizeof(char));
+    int i = 0;
+    int pos = 0;
+    int state = 0; //0, 1(\r), 2(\r\n), 3(\r\n\r), 4(\r\n\r\n)
 
-    ret = regcomp(&regex, ".*\r\n\r\n(.*)", 0);
-    if (ret) {
-        printf("Could not compile regex\n");
-        exit(1);
+    for (int i = 0; i < size; i++){
+        if (state == 4){
+            output[pos] = buf[i];
+            pos++;
+        }
+        else if (buf[i] == '\r' && (state == 0 || state == 2)){
+            state += 1;
+        }
+        else if (buf[i] == '\n' && state == 1){
+            state += 1;
+        }
+        else if (buf[i] == '\n' && state == 3){
+            state = 4;
+        }
+        else {
+            state = 0;
+        }
     }
-
-    ret = regexec(&regex, buf, 0, matched, 0);
-    if (!ret) {
-        printf("matched");
-    }
-    else if (ret == REG_NOMATCH) {
-        printf("No match\n");
-    }
-    else {
-        printf("error\n");
-        exit(1);
-    }
-    regfree(&regex);
+    output[pos]=0;
+    write(fileno(fptr), output, pos+1);
+    free(output);
     return 0;
 }
 
@@ -115,10 +119,15 @@ int main(int argc, char** argv){
     char* buffer = (char*)malloc(BUF_SIZE * sizeof(char));
     FILE* fptr = fopen(file, "w");
 
-    read_into_buffer(buffer, sock);
+    int size = read_into_buffer(buffer, sock);
+    if (size == -1){
+        print_error(4);
+        exit(1);
+    }
     printf("%s\n", buffer);
-    write_buffer(buffer, fptr);
+    write_buffer(buffer, fptr, size);
 
     shutdown(sock,SHUT_RDWR);
     fclose(fptr);
+    free(buffer);
 }
