@@ -15,3 +15,6 @@ our string parsing.
 * parse.c - Contains the parse() method which parses a URL into a host, path, and file
 * parse.h - Header file for parse.c
 * parsetest.c - Program for testing parse.c
+
+## Honor Code
+We have adhered to the Honor Code in this assignment.
